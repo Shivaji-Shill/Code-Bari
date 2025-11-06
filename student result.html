@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="bn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Result</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f2f5fa;
+        margin: 0;
+        padding: 40px;
+      }
+      .box {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #1e6f9f;
+      }
+      input,
+      button {
+        padding: 10px;
+        font-size: 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+      }
+      button {
+        background: #1e6f9f;
+        color: white;
+        cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+      }
+      .info {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h1>DIVINE PRIVATE HOME Result Portal</h1>
+      <label>Your Roll Number</label><br />
+      <input id="roll" type="text" placeholder="Example: 101" />
+      <button onclick="showResult()">Show Result</button>
+
+      <div id="result" class="info"></div>
+    </div>
+
+    <script>
+      const students = [
+        {
+          roll: "101",
+          name: "Shuvom Kumar Das",
+          class: "10",
+          subjects: [
+            { n: "Bangla", m: 15 },
+            { n: "English", m: 0 },
+            { n: "Math", m: 12 },
+          ],
+        },
+        {
+          roll: "102",
+          name: "Prapti",
+          class: "10",
+          subjects: [
+            { n: "Bangla", m: 95 },
+            { n: "English", m: 85 },
+            { n: "Math", m: 90 },
+          ],
+        },
+      ];
+
+      function grade(m) {
+        if (m >= 80) return "A+";
+        if (m >= 70) return "A";
+        if (m >= 60) return "A-";
+        if (m >= 50) return "B";
+        if (m >= 40) return "C";
+        if (m >= 33) return "D";
+        return "F";
+      }
+
+      function showResult() {
+        const roll = document.getElementById("roll").value.trim();
+        const s = students.find((x) => x.roll === roll);
+        const r = document.getElementById("result");
+        if (!s) {
+          r.innerHTML = "<p style='color:red'>Result not found!</p>";
+          return;
+        }
+        let total = 0;
+        let rows = s.subjects
+          .map((sub) => {
+            total += sub.m;
+            return `<tr><td>${sub.n}</td><td>${sub.m}</td><td>${grade(
+              sub.m
+            )}</td></tr>`;
+          })
+          .join("");
+        const percent = ((total / (s.subjects.length * 100)) * 100).toFixed(2);
+        r.innerHTML = `
+   <p><b>Name:</b> ${s.name} &nbsp; <b>Roll:</b> ${
+          s.roll
+        } &nbsp; <b>Class:</b> ${s.class}</p>
+   <table><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr>${rows}</table>
+   <p><b>Total:</b> ${total} / ${
+          s.subjects.length * 100
+        } &nbsp; <b>Percent:</b> ${percent}%</p>
+ `;
+      }
+    </script>
+  </body>
+</html>
